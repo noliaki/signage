@@ -1,0 +1,48 @@
+{
+  "name": "signage",
+  "version": "1.0.0",
+  "description": "signage",
+  "author": "noliaki <noliaki.mobile@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build:dev": "cross-env NODE_ENV=development DIST_DIR=./dist-dev run-s clean mkdir start:build",
+    "build:production": "cross-env NODE_ENV=production DIST_DIR=./dist run-s clean mkdir start:build:production",
+    "clean": "rm -fr $DIST_DIR",
+    "mkdir": "mkdir -p $DIST_DIR/css",
+    "start:build:production": "run-p pug stylus webpack imagemin",
+    "start:build": "run-p \"pug -- -w ./src/docroot\" \"stylus -- -w ./src/docroot\" webpack imagemin watch:image browser-sync",
+    "pug": "pug --basedir ./src/ --out $DIST_DIR ./src/docroot",
+    "stylus": "stylus -u autoprefixer-stylus --with \"{ browsers: ['android >= 4'] }\" -o $DIST_DIR/css --compress ./src/docroot/css/style.styl",
+    "webpack": "webpack --config ./webpack.config.js",
+    "imagemin": "node ./script/imagemin.js",
+    "watch:image": "node ./script/watch-image-file.js",
+    "browser-sync": "browser-sync start --server $DIST_DIR --files $DIST_DIR --directory --port 8000"
+  },
+  "dependencies": {
+    "autoprefixer-stylus": "^0.14.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.0",
+    "browser-sync": "^2.18.13",
+    "cross-env": "^5.0.1",
+    "glob": "^7.1.2",
+    "imagemin": "^5.3.1",
+    "imagemin-jpegtran": "^5.0.2",
+    "imagemin-pngquant": "^5.0.1",
+    "imagemin-svgo": "^5.2.2",
+    "npm-run-all": "^4.0.2",
+    "pug-cli": "^1.0.0-alpha6",
+    "stylus": "^0.54.5",
+    "vue": "^2.4.2",
+    "vuex": "^2.3.1",
+    "webpack": "^3.4.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}

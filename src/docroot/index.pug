@@ -1,0 +1,32 @@
+//- ------------------------------------
+//- extend
+//-
+extends /layouts/default
+
+//- ------------------------------------
+//- variables this page
+//-
+block variables
+  - const TITLE       = 'AWESOME TITLE';
+  - const DESCRIPTION = 'AWESOME DESCRIPTION';
+
+//- ------------------------------------
+//- style this page
+//-
+block style
+  //- example
+  //- link(rel="stylesheet", href="css/style.css")
+
+//- ------------------------------------
+//- script this page
+//-
+block scripts
+  //- example
+  script(src='js/index.js')
+
+
+//- ------------------------------------
+//- content this page
+//-
+block content
+  video(v-for='video in videos')

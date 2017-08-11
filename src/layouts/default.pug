@@ -1,0 +1,25 @@
+//- ------------------------------------
+//- include local variables
+//-
+block variables
+
+//- ------------------------------------
+//- HTML CONTENTS
+//-
+doctype html
+html(lang="ja")
+
+  //- ------------------------------------
+  //- include head element
+  //-
+  include /partials/head
+
+  //- ------------------------------------
+  //- begin body
+  //-
+  body
+    #app
+      block content
+
+    //-================ SCRIPT ================-//
+    block scripts
