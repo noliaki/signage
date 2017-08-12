@@ -1,7 +1,5 @@
 import video from './video'
 
 export default {
-  components: {
-    video
-  }
+  'video-media': video
 }

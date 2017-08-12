@@ -1,17 +1,35 @@
 import * as types from './mutation-types'
 
-export const getUserMedia = ({ commit }) => {
-  const $video = document.getElementById('video')
+export const getUserMedias = async ({ commit }) => {
+  const userDevices = await getUserDevices()
+  const videoDevices = userDevices.filter(device => device.kind === 'videoinput')
 
-  $video.addEventListener('loadedmetadata', (event) => {
-    $video.play()
+  const streams = await getUserVideoStream(videoDevices)
+  console.log(streams)
+  commit(types.SET_VIDEO_DEVICES, {
+    videoDevices: streams
+  })
+}
+
+const getUserDevices = () => {
+  return navigator.mediaDevices.enumerateDevices().then(devices => {
+    return devices
+  })
+}
+
+export const getUserVideoStream = (videoDevices) => {
+  const devices = []
+  videoDevices.forEach(device => {
+    console.log(device.deviceId)
+    devices.push(
+      navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {
+          deviceId: device.deviceId
+        }
+      })
+    )
   })
 
-  navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: true
-  }).then(stream => {
-    $video.src = window.URL.createObjectURL(stream)
-    console.log($video.src)
-  })
+  return Promise.all(devices).then(streams => streams)
 }

@@ -3,10 +3,17 @@ import { mapActions } from 'vuex'
 export default {
   methods: {
     ...mapActions([
-      'getUserMedia'
+      'getUserMedias'
     ])
   },
+  template: `
+    <video></video>
+  `,
   created () {
-    store.getUserMedia()
+    console.log(this.store)
+    this.$store.dispatch('getUserMedias')
+  },
+  mounted () {
+    console.log('mounted video')
   }
 }

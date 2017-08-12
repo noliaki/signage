@@ -1,9 +1,14 @@
-import Vue from 'Vue'
+import Vue from 'vue'
 import store from './store'
 import components from './components'
+
+// console.log(components)
 
 new Vue ({
   el: '#app',
   components,
-  store
+  store,
+  created () {
+    console.log('created')
+  }
 })

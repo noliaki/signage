@@ -1,15 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import actions from './actions'
-import getters from './getters'
+import * as actions from './actions'
+import * as getters from './getters'
 import mutations from './mutations'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    videos: []
+    videoDevices: [
+      {
+        deviceId: 123,
+        streamURL: 'string'
+      }
+    ],
+    userMedias: []
   },
   actions,
   getters,

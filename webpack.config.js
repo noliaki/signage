@@ -4,11 +4,12 @@ const webpack = require('webpack')
 const config = {
   context: path.resolve('./src/docroot', 'js/'),
   entry: {
-    index: './index.js'
+    index: ['babel-polyfill', './index.js']
   },
   resolve: {
     alias: {
-      vue: process.env.NODE_ENV === 'development' ? 'vue/dist/vue.js' : 'vue/dist/vue.min.js'
+      vue: process.env.NODE_ENV === 'development' ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.min.js',
+      vuex: process.env.NODE_ENV === 'development' ? 'vuex/dist/vuex.esm.js' : 'vuex/dist/vuex.min.js'
     }
   },
   output: {
@@ -21,10 +22,7 @@ const config = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [{
-          loader: 'babel-loader',
-          query: {
-            presets: ['env']
-          }
+          loader: 'babel-loader'
         }]
       }
     ]

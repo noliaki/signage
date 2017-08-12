@@ -1,1 +1,1 @@
-export const SET_VIDEO_MEDIA = 'SET_VIDEO_MEDIA'
+export const SET_VIDEO_DEVICES = 'SET_VIDEO_DEVICES'
