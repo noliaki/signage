@@ -1,19 +1,24 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
+  computed: {
+    ...mapState([
+      'video'
+    ])
+  },
   methods: {
     ...mapActions([
       'getUserMedias'
     ])
   },
   template: `
-    <video></video>
+    <div class="">
+      <video v-for="device in this.video.videoDevices"
+        :src="device.streamURL"
+        autoplay></video>
+    </div>
   `,
-  created () {
-    console.log(this.store)
-    this.$store.dispatch('getUserMedias')
-  },
   mounted () {
-    console.log('mounted video')
+    this.getUserMedias()
   }
 }

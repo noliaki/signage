@@ -14411,6 +14411,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var SET_VIDEO_DEVICES = exports.SET_VIDEO_DEVICES = 'SET_VIDEO_DEVICES';
+var ADD_VIDEO_DEVICES = exports.ADD_VIDEO_DEVICES = 'ADD_VIDEO_DEVICES';
 
 /***/ }),
 /* 118 */
@@ -19262,15 +19263,10 @@ var _components2 = _interopRequireDefault(_components);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// console.log(components)
-
 new _vue2.default({
   el: '#app',
   components: _components2.default,
-  store: _store2.default,
-  created: function created() {
-    console.log('created');
-  }
+  store: _store2.default
 });
 
 /***/ }),
@@ -19292,164 +19288,26 @@ var _vuex = __webpack_require__(116);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _actions = __webpack_require__(304);
+var _video = __webpack_require__(309);
 
-var actions = _interopRequireWildcard(_actions);
-
-var _getters = __webpack_require__(305);
-
-var getters = _interopRequireWildcard(_getters);
-
-var _mutations = __webpack_require__(306);
-
-var _mutations2 = _interopRequireDefault(_mutations);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _video2 = _interopRequireDefault(_video);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.use(_vuex2.default);
 
 exports.default = new _vuex2.default.Store({
-  state: {
-    videoDevices: [{
-      deviceId: 123,
-      streamURL: 'string'
-    }],
-    userMedias: []
+  modules: {
+    video: _video2.default
   },
-  actions: actions,
-  getters: getters,
-  mutations: _mutations2.default,
   strict: process.env.NODE_ENV !== 'production'
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(86)))
 
 /***/ }),
-/* 304 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getUserVideoStream = exports.getUserMedias = undefined;
-
-var _mutationTypes = __webpack_require__(117);
-
-var types = _interopRequireWildcard(_mutationTypes);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-var getUserMedias = exports.getUserMedias = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref2) {
-    var commit = _ref2.commit;
-    var userDevices, videoDevices, streams;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return getUserDevices();
-
-          case 2:
-            userDevices = _context.sent;
-            videoDevices = userDevices.filter(function (device) {
-              return device.kind === 'videoinput';
-            });
-            _context.next = 6;
-            return getUserVideoStream(videoDevices);
-
-          case 6:
-            streams = _context.sent;
-
-            console.log(streams);
-            commit(types.SET_VIDEO_DEVICES, {
-              videoDevices: streams
-            });
-
-          case 9:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, undefined);
-  }));
-
-  return function getUserMedias(_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-var getUserDevices = function getUserDevices() {
-  return navigator.mediaDevices.enumerateDevices().then(function (devices) {
-    return devices;
-  });
-};
-
-var getUserVideoStream = exports.getUserVideoStream = function getUserVideoStream(videoDevices) {
-  var devices = [];
-  videoDevices.forEach(function (device) {
-    console.log(device.deviceId);
-    devices.push(navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        deviceId: device.deviceId
-      }
-    }));
-  });
-
-  return Promise.all(devices).then(function (streams) {
-    return streams;
-  });
-};
-
-/***/ }),
-/* 305 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var videoMedias = exports.videoMedias = function videoMedias(state) {
-  return state.userMedias.filter(function (media) {
-    return media.kind === 'videoinput';
-  });
-};
-
-/***/ }),
-/* 306 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _mutationTypes = __webpack_require__(117);
-
-var types = _interopRequireWildcard(_mutationTypes);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-exports.default = _defineProperty({}, types.SET_VIDEO_DEVICES, function (state, _ref) {
-  var videoDevices = _ref.videoDevices;
-
-  state.videoDevices = videoDevices;
-});
-
-/***/ }),
+/* 304 */,
+/* 305 */,
+/* 306 */,
 /* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19486,14 +19344,202 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var _vuex = __webpack_require__(116);
 
 exports.default = {
+  computed: _extends({}, (0, _vuex.mapState)(['video'])),
   methods: _extends({}, (0, _vuex.mapActions)(['getUserMedias'])),
-  template: '\n    <video></video>\n  ',
-  created: function created() {
-    console.log(this.store);
-    this.$store.dispatch('getUserMedias');
-  },
+  template: '\n    <div class="">\n      <video v-for="device in this.video.videoDevices"\n        :src="device.streamURL"\n        autoplay></video>\n    </div>\n  ',
   mounted: function mounted() {
-    console.log('mounted video');
+    this.getUserMedias();
+  }
+};
+
+/***/ }),
+/* 309 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _actions = __webpack_require__(310);
+
+var _actions2 = _interopRequireDefault(_actions);
+
+var _mutations = __webpack_require__(311);
+
+var _mutations2 = _interopRequireDefault(_mutations);
+
+var _getters = __webpack_require__(312);
+
+var _getters2 = _interopRequireDefault(_getters);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var state = {
+  videoDevices: []
+};
+
+exports.default = {
+  state: state,
+  actions: _actions2.default,
+  mutations: _mutations2.default,
+  getters: _getters2.default
+};
+
+/***/ }),
+/* 310 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _mutationTypes = __webpack_require__(117);
+
+var types = _interopRequireWildcard(_mutationTypes);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+exports.default = {
+  getUserMedias: function () {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref2) {
+      var _this = this;
+
+      var commit = _ref2.commit;
+      var userDevices, videoDevices;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return getUserDevices();
+
+            case 2:
+              userDevices = _context2.sent;
+              videoDevices = userDevices.filter(function (device) {
+                return device.kind === 'videoinput';
+              });
+
+
+              videoDevices.forEach(function () {
+                var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(videoDevice) {
+                  var stream, streamURL;
+                  return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _context.next = 2;
+                          return getUserVideoStream(videoDevice);
+
+                        case 2:
+                          stream = _context.sent;
+                          streamURL = window.URL.createObjectURL(stream);
+
+                          commit(types.ADD_VIDEO_DEVICES, {
+                            videoMedia: {
+                              videoDevice: videoDevice,
+                              streamURL: streamURL
+                            }
+                          });
+
+                        case 5:
+                        case 'end':
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee, _this);
+                }));
+
+                return function (_x2) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+
+            case 5:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    function getUserMedias(_x) {
+      return _ref.apply(this, arguments);
+    }
+
+    return getUserMedias;
+  }()
+};
+
+
+function getUserDevices() {
+  return navigator.mediaDevices.enumerateDevices().then(function (devices) {
+    return devices;
+  });
+}
+
+function getUserVideoStream(videoDevice) {
+  return navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: {
+      deviceId: videoDevice.deviceId
+    }
+  }).then(function (stream) {
+    return stream;
+  });
+}
+
+/***/ }),
+/* 311 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _types$SET_VIDEO_DEVI;
+
+var _mutationTypes = __webpack_require__(117);
+
+var types = _interopRequireWildcard(_mutationTypes);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+exports.default = (_types$SET_VIDEO_DEVI = {}, _defineProperty(_types$SET_VIDEO_DEVI, types.SET_VIDEO_DEVICES, function (state, _ref) {
+  var videoDevices = _ref.videoDevices;
+
+  state.videoDevices = videoDevices;
+}), _defineProperty(_types$SET_VIDEO_DEVI, types.ADD_VIDEO_DEVICES, function (state, _ref2) {
+  var videoMedia = _ref2.videoMedia;
+
+  state.videoDevices.push(videoMedia);
+}), _types$SET_VIDEO_DEVI);
+
+/***/ }),
+/* 312 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  videoState: function videoState(state) {
+    return state;
   }
 };
 
