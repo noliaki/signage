@@ -8,6 +8,13 @@ export default {
     videoDevices.forEach(async videoDevice => {
       const stream = await getUserVideoStream(videoDevice)
       const streamURL = window.URL.createObjectURL(stream)
+
+      commit(types.ADD_VIDEO_DEVICES, {
+        videoMedia: {
+          videoDevice,
+          streamURL
+        }
+      })
       commit(types.ADD_VIDEO_DEVICES, {
         videoMedia: {
           videoDevice,

@@ -19257,7 +19257,7 @@ var _store = __webpack_require__(303);
 
 var _store2 = _interopRequireDefault(_store);
 
-var _components = __webpack_require__(307);
+var _components = __webpack_require__(308);
 
 var _components2 = _interopRequireDefault(_components);
 
@@ -19288,7 +19288,7 @@ var _vuex = __webpack_require__(116);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _video = __webpack_require__(309);
+var _video = __webpack_require__(304);
 
 var _video2 = _interopRequireDefault(_video);
 
@@ -19305,10 +19305,7 @@ exports.default = new _vuex2.default.Store({
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(86)))
 
 /***/ }),
-/* 304 */,
-/* 305 */,
-/* 306 */,
-/* 307 */
+/* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19318,67 +19315,23 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _video = __webpack_require__(308);
-
-var _video2 = _interopRequireDefault(_video);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-  'video-media': _video2.default
-};
-
-/***/ }),
-/* 308 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _vuex = __webpack_require__(116);
-
-exports.default = {
-  computed: _extends({}, (0, _vuex.mapState)(['video'])),
-  methods: _extends({}, (0, _vuex.mapActions)(['getUserMedias'])),
-  template: '\n    <div class="">\n      <video v-for="device in this.video.videoDevices"\n        :src="device.streamURL"\n        autoplay></video>\n    </div>\n  ',
-  mounted: function mounted() {
-    this.getUserMedias();
-  }
-};
-
-/***/ }),
-/* 309 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _actions = __webpack_require__(310);
+var _actions = __webpack_require__(305);
 
 var _actions2 = _interopRequireDefault(_actions);
 
-var _mutations = __webpack_require__(311);
+var _mutations = __webpack_require__(306);
 
 var _mutations2 = _interopRequireDefault(_mutations);
 
-var _getters = __webpack_require__(312);
+var _getters = __webpack_require__(307);
 
 var _getters2 = _interopRequireDefault(_getters);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var state = {
-  videoDevices: []
+  videoDevices: [],
+  currentVideoIndex: 0
 };
 
 exports.default = {
@@ -19389,7 +19342,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 310 */
+/* 305 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19442,6 +19395,13 @@ exports.default = {
                           stream = _context.sent;
                           streamURL = window.URL.createObjectURL(stream);
 
+
+                          commit(types.ADD_VIDEO_DEVICES, {
+                            videoMedia: {
+                              videoDevice: videoDevice,
+                              streamURL: streamURL
+                            }
+                          });
                           commit(types.ADD_VIDEO_DEVICES, {
                             videoMedia: {
                               videoDevice: videoDevice,
@@ -19449,7 +19409,7 @@ exports.default = {
                             }
                           });
 
-                        case 5:
+                        case 6:
                         case 'end':
                           return _context.stop();
                       }
@@ -19497,7 +19457,7 @@ function getUserVideoStream(videoDevice) {
 }
 
 /***/ }),
-/* 311 */
+/* 306 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19528,7 +19488,7 @@ exports.default = (_types$SET_VIDEO_DEVI = {}, _defineProperty(_types$SET_VIDEO_
 }), _types$SET_VIDEO_DEVI);
 
 /***/ }),
-/* 312 */
+/* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19540,6 +19500,82 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
   videoState: function videoState(state) {
     return state;
+  }
+};
+
+/***/ }),
+/* 308 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _video = __webpack_require__(309);
+
+var _video2 = _interopRequireDefault(_video);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  'video-media': _video2.default
+};
+
+/***/ }),
+/* 309 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _vuex = __webpack_require__(116);
+
+exports.default = {
+  data: function data() {
+    return {
+      interval: 1000,
+      timer: null,
+      currentVideoIndex: 0
+    };
+  },
+
+  computed: _extends({}, (0, _vuex.mapState)(['video'])),
+  methods: _extends({}, (0, _vuex.mapActions)(['getUserMedias']), {
+    flipVideo: function flipVideo() {
+      this.stopFlip();
+
+      if (!this.video.videoDevices.length) {
+        this.timer = setTimeout(this.flipVideo, this.interval);
+        return;
+      }
+
+      this.currentVideoIndex = (this.currentVideoIndex + 1) % this.video.videoDevices.length;
+      this.startFlip();
+    },
+    startFlip: function startFlip() {
+      this.timer = setTimeout(this.flipVideo, this.interval);
+    },
+    stopFlip: function stopFlip() {
+      if (!this.timer) return;
+
+      clearTimeout(this.timer);
+    }
+  }),
+  template: '\n    <div class="">\n      <video v-for="(device, index) in video.videoDevices"\n        :src="device.streamURL"\n        v-show="index === currentVideoIndex"\n        autoplay>{{ index }}</video>\n    </div>\n  ',
+  created: function created() {
+    this.getUserMedias();
+  },
+  mounted: function mounted() {
+    this.startFlip();
   }
 };
 
